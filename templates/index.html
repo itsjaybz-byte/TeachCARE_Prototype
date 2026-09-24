@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}TeachCARE Dashboard{% endblock %}
+{% block content %}
+<div class="p-4 mb-4 rounded-3 hero">
+<h1>TeachCARE</h1>
+<p class="lead">Constraint-Based Mathematical and Computational Framework for Teacher Workload Management</p>
+<p class="mb-0">Prototype workflow: input → qualification filtering → optimization → schedule → workload → independent validation.</p>
+</div>
+<div class="row g-3">
+{% for label, value in [("Teachers", teacher_count), ("Sections", section_count), ("Subjects", subject_count), ("Requirements", requirement_count)] %}
+<div class="col-md-3"><div class="card metric"><div class="card-body"><small>{{ label }}</small><h2>{{ value }}</h2></div></div></div>
+{% endfor %}
+</div>
+<div class="mt-4 card"><div class="card-body">
+<h4>Research prototype workflow</h4>
+<ol>
+<li>Validate input data.</li><li>Filter assignments using qualifications and JHS/SHS eligibility.</li>
+<li>Build the binary optimization model.</li><li>Generate a feasible schedule.</li>
+<li>Calculate workload against the 6-hour target.</li><li>Independently validate the generated schedule.</li>
+</ol>
+<a class="btn btn-primary" href="{{ url_for('generate') }}">Run Scheduling Optimization</a>
+</div></div>
+{% endblock %}

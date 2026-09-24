@@ -1,0 +1,41 @@
+{
+    "study": "TeachCARE",
+    "analysis": "Sprint 3.5 - Experimental Results Integration",
+    "baseline": {
+        "scenario": "Baseline feasible",
+        "feasibility": "FEASIBLE",
+        "solver_status": "OPTIMAL",
+        "schedule_entries": 40,
+        "objective_value": 4.0,
+        "mad": 0.6666666666666666
+    },
+    "availability_restricted": {
+        "scenario": "Availability-restricted",
+        "feasibility": "FEASIBLE",
+        "solver_status": "OPTIMAL",
+        "schedule_entries": 40,
+        "objective_value": 16.0,
+        "mad": 2.6666666666666665,
+        "objective_change_from_baseline": 12.0,
+        "mad_change_from_baseline": 2.0
+    },
+    "qualification_restricted": {
+        "scenario": "Qualification-restricted",
+        "feasibility": "INFEASIBLE",
+        "solver_status": "INFEASIBLE",
+        "schedule_entries": 0,
+        "objective_value": null,
+        "mad": null,
+        "objective_change_from_baseline": null,
+        "mad_change_from_baseline": null
+    },
+    "current_baseline_workload": {
+        "schedule_entries": 40,
+        "teacher_count": 6,
+        "total_workload": 40,
+        "minimum_workload": 6,
+        "maximum_workload": 8,
+        "average_workload": 6.666666666666667,
+        "mad": 0.6666666666666666
+    }
+}

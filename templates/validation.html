@@ -1,0 +1,339 @@
+{% extends "base.html" %}
+
+{% block title %}Independent Validation{% endblock %}
+
+{% block content %}
+
+<h2>Independent Validation</h2>
+
+<p class="text-muted">
+    The generated schedule is independently evaluated against curriculum,
+    teacher qualification, educational-level eligibility, scheduling conflict,
+    and workload-balance constraints.
+</p>
+
+
+<!-- =========================================================
+     OVERALL VALIDATION STATUS
+     ========================================================= -->
+
+{% if result.valid %}
+
+<div class="alert alert-success">
+    <strong>VALID:</strong>
+    No hard scheduling violations were detected.
+</div>
+
+{% else %}
+
+<div class="alert alert-danger">
+    <strong>INVALID:</strong>
+    Validation detected {{ result.errors|length }} error(s).
+</div>
+
+{% endif %}
+
+
+<!-- =========================================================
+     HARD CONSTRAINT ERRORS
+     ========================================================= -->
+
+<h4 class="mt-4">Scheduling Constraint Validation</h4>
+
+{% if result.errors %}
+
+<ul>
+    {% for error in result.errors %}
+    <li>{{ error }}</li>
+    {% endfor %}
+</ul>
+
+{% else %}
+
+<p class="text-success">
+    No curriculum, qualification, educational-level, teacher conflict,
+    or section conflict violations were detected.
+</p>
+
+{% endif %}
+
+
+<!-- =========================================================
+     WORKLOAD ASSESSMENT
+     ========================================================= -->
+
+<h4 class="mt-4">Workload-Based Assessment</h4>
+
+{% if result.report %}
+
+<p>
+    The workload assessment compares each teacher's assigned contact-teaching
+    periods against the study target of
+    <strong>{{ result.report.target }}</strong> periods.
+</p>
+
+
+<!-- SUMMARY STATISTICS -->
+
+<div class="row g-3 mb-4">
+
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <h6 class="card-title text-muted">
+                    Teachers Assessed
+                </h6>
+                <h3>{{ result.report.teacher_count }}</h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <h6 class="card-title text-muted">
+                    Total Workload
+                </h6>
+                <h3>{{ result.report.total_workload }}</h3>
+                <small class="text-muted">
+                    contact periods
+                </small>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <h6 class="card-title text-muted">
+                    Mean Absolute Deviation
+                </h6>
+                <h3>{{ "%.2f"|format(result.report.mad) }}</h3>
+                <small class="text-muted">
+                    lower values indicate greater balance
+                </small>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<div class="row g-3 mb-4">
+
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <h6 class="card-title text-muted">
+                    Average Workload
+                </h6>
+                <h3>
+                    {{ "%.2f"|format(result.report.average_workload) }}
+                </h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <h6 class="card-title text-muted">
+                    Minimum Workload
+                </h6>
+                <h3>{{ result.report.minimum_workload }}</h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <h6 class="card-title text-muted">
+                    Maximum Workload
+                </h6>
+                <h3>{{ result.report.maximum_workload }}</h3>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     PER-TEACHER ASSESSMENT
+     ========================================================= -->
+
+<h5 class="mt-4">Teacher Workload Assessment</h5>
+
+<div class="table-responsive">
+
+<table class="table table-bordered table-hover align-middle">
+
+<thead>
+<tr>
+    <th>Teacher</th>
+    <th>Contact Periods</th>
+    <th>Target</th>
+    <th>Absolute Deviation</th>
+    <th>Assessment</th>
+</tr>
+</thead>
+
+<tbody>
+
+{% for teacher in result.report.teachers %}
+
+<tr>
+
+    <td>
+        <strong>{{ teacher.name }}</strong>
+    </td>
+
+    <td>
+        {{ teacher.workload }}
+    </td>
+
+    <td>
+        {{ teacher.target }}
+    </td>
+
+    <td>
+        {{ teacher.absolute_deviation }}
+    </td>
+
+    <td>
+
+        {% if teacher.status == "GREEN" %}
+
+            <span class="badge bg-success">
+                Balanced
+            </span>
+
+        {% elif teacher.status == "YELLOW" %}
+
+            <span class="badge bg-warning text-dark">
+                Slightly Unbalanced
+            </span>
+
+        {% else %}
+
+            <span class="badge bg-danger">
+                Significantly Unbalanced
+            </span>
+
+        {% endif %}
+
+    </td>
+
+</tr>
+
+{% endfor %}
+
+</tbody>
+
+</table>
+
+</div>
+
+
+<!-- =========================================================
+     LEGEND
+     ========================================================= -->
+
+<div class="card mt-4">
+
+    <div class="card-body">
+
+        <h5 class="card-title">
+            Workload Assessment Interpretation
+        </h5>
+
+        <ul class="mb-0">
+
+            <li>
+                <strong>Balanced:</strong>
+                workload exactly matches the study target.
+            </li>
+
+            <li>
+                <strong>Slightly Unbalanced:</strong>
+                workload differs from the target by 1–2 periods.
+            </li>
+
+            <li>
+                <strong>Significantly Unbalanced:</strong>
+                workload differs from the target by more than 2 periods.
+            </li>
+
+        </ul>
+
+    </div>
+
+</div>
+
+
+{% else %}
+
+<div class="alert alert-warning mt-3">
+    Workload assessment data is not available.
+</div>
+
+{% endif %}
+
+
+<!-- =========================================================
+     WORKLOAD OBSERVATIONS
+     ========================================================= -->
+
+<h4 class="mt-4">Workload Observations</h4>
+
+{% if result.warnings %}
+
+<ul>
+
+    {% for warning in result.warnings %}
+
+    <li>{{ warning }}</li>
+
+    {% endfor %}
+
+</ul>
+
+{% else %}
+
+<p class="text-success">
+    No workload imbalance observations were detected.
+</p>
+
+{% endif %}
+
+
+<!-- =========================================================
+     RESEARCH INPUT
+     ========================================================= -->
+
+<div class="card mt-4">
+
+    <div class="card-body">
+
+        <h5 class="card-title">
+            Research Input
+        </h5>
+
+        <p class="card-text text-muted mb-0">
+
+            Independent validation separates hard scheduling feasibility
+            from workload quality. A schedule may satisfy all required
+            curriculum, qualification, eligibility, availability, and
+            scheduling constraints while still exhibiting workload
+            imbalance. The workload assessment therefore provides a
+            quantitative basis for evaluating the quality of the generated
+            teacher assignment.
+
+        </p>
+
+    </div>
+
+</div>
+
+{% endblock %}

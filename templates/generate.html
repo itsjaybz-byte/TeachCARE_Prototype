@@ -1,0 +1,433 @@
+{% extends "base.html" %}
+
+{% block title %}Generate Schedule{% endblock %}
+
+{% block content %}
+
+<!-- ========================================================= -->
+<!-- PAGE INTRODUCTION -->
+<!-- ========================================================= -->
+
+<div class="card mb-4">
+    <div class="card-body">
+
+        <h2>Generate Optimized Schedule</h2>
+
+        <p class="text-muted mb-0">
+            TeachCARE evaluates possible teacher assignments against
+            the implemented eligibility constraints before passing
+            valid candidates to the optimization model.
+        </p>
+
+    </div>
+</div>
+
+
+<!-- ========================================================= -->
+<!-- ELIGIBILITY SCREENING -->
+<!-- ========================================================= -->
+
+<div class="card mb-4">
+    <div class="card-body">
+
+        <h4>1. Candidate Eligibility Screening</h4>
+
+        <p>
+            Before schedule generation, possible teacher–curriculum
+            requirement–period combinations are filtered according to
+            four eligibility conditions.
+        </p>
+
+        <div class="row">
+
+            <div class="col-md-6 mb-3">
+                <div class="border rounded p-3 h-100">
+
+                    <strong>Subject Qualification</strong>
+
+                    <p class="text-muted mb-0 mt-2">
+                        The teacher must be qualified to teach
+                        the required subject.
+                    </p>
+
+                </div>
+            </div>
+
+
+            <div class="col-md-6 mb-3">
+                <div class="border rounded p-3 h-100">
+
+                    <strong>Educational Attainment</strong>
+
+                    <p class="text-muted mb-0 mt-2">
+                        The teacher must satisfy the minimum
+                        educational attainment requirement
+                        associated with the subject.
+                    </p>
+
+                </div>
+            </div>
+
+
+            <div class="col-md-6 mb-3">
+                <div class="border rounded p-3 h-100">
+
+                    <strong>Educational-Level Eligibility</strong>
+
+                    <p class="text-muted mb-0 mt-2">
+                        The teacher must be eligible to teach
+                        at the educational level of the section,
+                        such as JHS or SHS.
+                    </p>
+
+                </div>
+            </div>
+
+
+            <div class="col-md-6 mb-3">
+                <div class="border rounded p-3 h-100">
+
+                    <strong>Teacher Availability</strong>
+
+                    <p class="text-muted mb-0 mt-2">
+                        The teacher must be available during
+                        the specific scheduling period.
+                    </p>
+
+                </div>
+            </div>
+
+        </div>
+
+
+        <hr>
+
+
+        <!-- ================================================= -->
+        <!-- ELIGIBILITY STATISTICS -->
+        <!-- ================================================= -->
+
+        <h5 class="mb-3">
+            Eligibility Screening Summary
+        </h5>
+
+
+        <div class="row text-center">
+
+            <div class="col-md-3 mb-3">
+
+                <div class="border rounded p-3 h-100">
+
+                    <div class="text-muted">
+                        Teachers
+                    </div>
+
+                    <h3 class="mb-0">
+                        {{ eligibility.teacher_count }}
+                    </h3>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-md-3 mb-3">
+
+                <div class="border rounded p-3 h-100">
+
+                    <div class="text-muted">
+                        Curriculum Requirements
+                    </div>
+
+                    <h3 class="mb-0">
+                        {{ eligibility.requirement_count }}
+                    </h3>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-md-3 mb-3">
+
+                <div class="border rounded p-3 h-100">
+
+                    <div class="text-muted">
+                        Schedule Periods
+                    </div>
+
+                    <h3 class="mb-0">
+                        {{ eligibility.period_count }}
+                    </h3>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-md-3 mb-3">
+
+                <div class="border rounded p-3 h-100">
+
+                    <div class="text-muted">
+                        All Possible Combinations
+                    </div>
+
+                    <h3 class="mb-0">
+                        {{ eligibility.total_possible }}
+                    </h3>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="table-responsive">
+
+            <table class="table table-bordered align-middle">
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Screening Stage
+                        </th>
+
+                        <th class="text-center">
+                            Candidate Combinations Remaining
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    <tr>
+
+                        <td>
+                            After subject qualification screening
+                        </td>
+
+                        <td class="text-center">
+                            {{ eligibility.qualification_pass }}
+                        </td>
+
+                    </tr>
+
+
+                    <tr>
+
+                        <td>
+                            After educational attainment screening
+                        </td>
+
+                        <td class="text-center">
+                            {{ eligibility.attainment_pass }}
+                        </td>
+
+                    </tr>
+
+
+                    <tr>
+
+                        <td>
+                            After educational-level eligibility screening
+                        </td>
+
+                        <td class="text-center">
+                            {{ eligibility.level_pass }}
+                        </td>
+
+                    </tr>
+
+
+                    <tr class="table-success">
+
+                        <td>
+                            <strong>
+                                Eligible candidates passed to optimization
+                            </strong>
+                        </td>
+
+                        <td class="text-center">
+
+                            <strong>
+                                {{ eligibility.eligible_candidates }}
+                            </strong>
+
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+</div>
+
+
+<!-- ========================================================= -->
+<!-- OPTIMIZATION MODEL -->
+<!-- ========================================================= -->
+
+<div class="card mb-4">
+
+    <div class="card-body">
+
+        <h4>2. Binary Optimization Model</h4>
+
+        <p class="text-muted">
+            Eligible candidate assignments are represented using
+            binary decision variables. The optimizer applies the
+            curriculum requirements and hard scheduling constraints
+            while minimizing total workload deviation.
+        </p>
+
+
+        <div class="formula">
+
+            x<sub>t,r,p</sub> ∈ {0,1}
+
+            <br>
+
+            W<sub>t</sub>
+            =
+            total assigned contact periods
+
+            <br>
+
+            D<sub>t</sub>
+            =
+            |W<sub>t</sub> − 6|
+
+            <br>
+
+            Objective:
+            minimize Σ D<sub>t</sub>
+
+        </div>
+
+
+        <p class="text-muted mt-3 mb-0">
+
+            Where
+            <strong>t</strong> represents a teacher,
+            <strong>r</strong> represents a curriculum requirement,
+            and <strong>p</strong> represents a schedule period.
+
+        </p>
+
+    </div>
+
+</div>
+
+
+<!-- ========================================================= -->
+<!-- SCHEDULE GENERATION -->
+<!-- ========================================================= -->
+
+<div class="card mb-4">
+
+    <div class="card-body text-center">
+
+        <h4>3. Generate Optimized Schedule</h4>
+
+        <p class="text-muted">
+
+            Eligible candidates are passed to the binary optimization
+            model to generate a schedule that satisfies curriculum
+            requirements and hard scheduling constraints while
+            minimizing workload deviation from the target workload.
+
+        </p>
+
+
+        <form method="post">
+
+            <button
+                type="submit"
+                class="btn btn-primary btn-lg"
+            >
+
+                Generate Optimized Schedule
+
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<!-- ========================================================= -->
+<!-- COMPUTATIONAL WORKFLOW -->
+<!-- ========================================================= -->
+
+<div class="card">
+
+    <div class="card-body">
+
+        <h5 class="text-center mb-3">
+            TeachCARE Computational Workflow
+        </h5>
+
+
+        <div class="text-center">
+
+            <strong>
+                Input Data
+            </strong>
+
+            →
+
+            <strong>
+                Eligibility Filtering
+            </strong>
+
+            →
+
+            <strong>
+                Binary Optimization
+            </strong>
+
+            →
+
+            <strong>
+                Generated Schedule
+            </strong>
+
+            →
+
+            <strong>
+                Workload Analysis
+            </strong>
+
+            →
+
+            <strong>
+                Independent Validation
+            </strong>
+
+        </div>
+
+
+        <p class="text-muted text-center mt-3 mb-0">
+
+            This workflow represents the implemented computational
+            framework used by the TeachCARE prototype.
+
+        </p>
+
+    </div>
+
+</div>
+
+{% endblock %}

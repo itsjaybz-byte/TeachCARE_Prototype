@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+
+{% block title %}Teacher Availability{% endblock %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <div>
+        <h2>Teacher Availability</h2>
+        <p class="text-muted mb-0">
+            View which scheduling periods each teacher is available for.
+        </p>
+    </div>
+</div>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+            <div class="alert alert-{{ category }}" role="alert">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+
+{% if availability_records %}
+
+<div class="table-responsive">
+    <table class="table table-bordered table-hover align-middle">
+
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Teacher</th>
+                <th>Day</th>
+                <th>Period</th>
+                <th>Availability</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            {% for record in availability_records %}
+
+            <tr>
+                <td>{{ record.id }}</td>
+
+                <td>
+                    <strong>{{ record.teacher.name }}</strong>
+                </td>
+
+                <td>{{ record.schedule_period.day }}</td>
+
+                <td>{{ record.schedule_period.period }}</td>
+
+                <td>
+                    {% if record.available %}
+                        <span class="badge bg-success">
+                            Available
+                        </span>
+                    {% else %}
+                        <span class="badge bg-danger">
+                            Unavailable
+                        </span>
+                    {% endif %}
+                </td>
+
+                <td>
+                    <form
+                        method="POST"
+                        action="{{ url_for(
+                            'toggle_availability',
+                            availability_id=record.id
+                        ) }}"
+                        class="d-inline"
+                    >
+                        <button
+                            type="submit"
+                            class="btn btn-sm {% if record.available %}btn-outline-danger{% else %}btn-outline-success{% endif %}"
+                        >
+                            {% if record.available %}
+                                Mark Unavailable
+                            {% else %}
+                                Mark Available
+                            {% endif %}
+                        </button>
+                    </form>
+                </td>
+            </tr>
+
+            {% endfor %}
+
+        </tbody>
+
+    </table>
+</div>
+
+{% else %}
+
+<div class="alert alert-info">
+    No teacher availability records have been defined.
+</div>
+
+{% endif %}
+
+<div class="card mt-4">
+    <div class="card-body">
+        <h5 class="card-title">Research Input</h5>
+
+        <p class="card-text text-muted mb-0">
+            Teacher availability determines which scheduling periods a teacher
+            can be assigned to. The scheduling optimizer uses these records as
+            a hard scheduling constraint when generating teacher assignments.
+        </p>
+    </div>
+</div>
+
+{% endblock %}

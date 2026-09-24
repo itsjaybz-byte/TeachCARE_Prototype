@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block title %}Scheduling Periods{% endblock %}
+
+{% block content %}
+
+<h2>Scheduling Periods</h2>
+
+<p class="text-muted">
+    These are the ordered scheduling periods used by the scheduling framework.
+</p>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Sequence</th>
+            <th>Day</th>
+            <th>Period</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for period in periods %}
+        <tr>
+            <td>{{ period.id }}</td>
+            <td>{{ period.sequence }}</td>
+            <td>{{ period.day }}</td>
+            <td>{{ period.period }}</td>
+        </tr>
+        {% else %}
+        <tr>
+            <td colspan="4" class="text-muted text-center">
+                No scheduling periods are configured.
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<div class="card mt-4">
+    <div class="card-body">
+        <h5 class="card-title">Research Input</h5>
+        <p class="card-text">
+            Scheduling periods define the available time slots used by the
+            scheduling optimizer. The sequence value determines their
+            chronological ordering.
+        </p>
+    </div>
+</div>
+
+{% endblock %}

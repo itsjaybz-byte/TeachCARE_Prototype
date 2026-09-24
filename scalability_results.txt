@@ -1,0 +1,113 @@
+python test_scalability.py
+
+========================================
+SPRINT 2.11 - SCALABILITY TEST
+========================================
+
+Solver time limit per scenario: 30 seconds
+
+----------------------------------------
+Scale 1 - Small
+----------------------------------------
+Teachers:  10
+Sections:  5
+Subjects:  5
+Periods:   15
+
+Running optimizer...
+
+Requirements:          25
+Availability records:  150
+Candidate assignments: 750
+Decision variables:    770
+Constraints:           280
+Solver status:         OPTIMAL
+Schedule entries:      50
+Execution time:        0.6375 seconds
+Minimum workload:      4.00
+Maximum workload:      6.00
+Average workload:      5.00
+MAD from target:       1.0000
+
+----------------------------------------
+Scale 2 - Medium
+----------------------------------------
+Teachers:  20
+Sections:  8
+Subjects:  6
+Periods:   15
+
+Running optimizer...
+
+Requirements:          48
+Availability records:  300
+Candidate assignments: 2400
+Decision variables:    2440
+Constraints:           528
+Solver status:         OPTIMAL
+Schedule entries:      96
+Execution time:        5.0665 seconds
+Minimum workload:      0.00
+Maximum workload:      6.00
+Average workload:      4.80
+MAD from target:       1.2000
+
+----------------------------------------
+Scale 3 - Large
+----------------------------------------
+Teachers:  30
+Sections:  12
+Subjects:  7
+Periods:   15
+
+Running optimizer...
+
+Requirements:          84
+Availability records:  450
+Candidate assignments: 5400
+Decision variables:    5460
+Constraints:           804
+Solver status:         OPTIMAL
+Schedule entries:      168
+Execution time:        27.7386 seconds
+Minimum workload:      0.00
+Maximum workload:      6.00
+Average workload:      5.60
+MAD from target:       0.4000
+
+----------------------------------------
+Scale 4 - Very Large
+----------------------------------------
+Teachers:  40
+Sections:  16
+Subjects:  8
+Periods:   15
+
+Running optimizer...
+
+Requirements:          128
+Availability records:  600
+Candidate assignments: 9600
+Decision variables:    9680
+Constraints:           1088
+Solver status:         TIME_LIMIT
+Schedule entries:      0
+Execution time:        91.5763 seconds
+Minimum workload:      0.00
+Maximum workload:      0.00
+Average workload:      0.00
+MAD from target:       6.0000
+
+========================================
+SCALABILITY EXPERIMENT SUMMARY
+
+Scale | Teachers | Sections | Subjects | Requirements | Variables | Constraints | Runtime | Status | MAD
+-------------------------------------------------------------------------------------------------------------------
+Scale 1 - Small | 10 | 5 | 5 | 25 | 770 | 280 | 0.6375s | OPTIMAL | 1.0000
+Scale 2 - Medium | 20 | 8 | 6 | 48 | 2440 | 528 | 5.0665s | OPTIMAL | 1.2000
+Scale 3 - Large | 30 | 12 | 7 | 84 | 5460 | 804 | 27.7386s | OPTIMAL | 0.4000
+Scale 4 - Very Large | 40 | 16 | 8 | 128 | 9680 | 1088 | 91.5763s | TIME_LIMIT | 6.0000
+
+========================================
+SPRINT 2.11 EXPERIMENT COMPLETE
+========================================

@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+
+{% block title %}Subjects{% endblock %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <div>
+        <h1>Subjects</h1>
+        <p class="text-muted mb-0">
+            Manage subjects and the qualifications required to teach them.
+        </p>
+    </div>
+
+    <a href="{{ url_for('create_subject') }}" class="btn btn-primary">
+        + Add Subject
+    </a>
+</div>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+            <div class="alert alert-{{ category }}" role="alert">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+
+{% if subjects %}
+
+<div class="table-responsive">
+    <table class="table table-bordered table-hover align-middle">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Subject</th>
+                <th>Required Qualification</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for subject in subjects %}
+            <tr>
+                <td>{{ subject.id }}</td>
+
+                <td>
+                    <strong>{{ subject.name }}</strong>
+                </td>
+
+                <td>
+                    {{ subject.required_qualification.name
+                       if subject.required_qualification
+                       else "—" }}
+                </td>
+
+                <td>
+                    <a
+                        href="{{ url_for('edit_subject', subject_id=subject.id) }}"
+                        class="btn btn-sm btn-outline-primary"
+                    >
+                        Edit
+                    </a>
+
+                    <form
+                        method="POST"
+                        action="{{ url_for('delete_subject', subject_id=subject.id) }}"
+                        class="d-inline"
+                        onsubmit="return confirm('Delete this subject? This action cannot be undone.');"
+                    >
+                        <button
+                            type="submit"
+                            class="btn btn-sm btn-outline-danger"
+                        >
+                            Delete
+                        </button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% else %}
+
+<div class="alert alert-info">
+    No subjects have been created yet.
+</div>
+
+{% endif %}
+
+<div class="card mt-4">
+    <div class="card-body">
+        <h5 class="card-title">Research Input</h5>
+        <p class="card-text text-muted mb-0">
+            Each subject is linked to a required qualification.
+            The scheduling optimizer uses this relationship when
+            determining whether a teacher is qualified to receive
+            a subject assignment.
+        </p>
+    </div>
+</div>
+
+{% endblock %}

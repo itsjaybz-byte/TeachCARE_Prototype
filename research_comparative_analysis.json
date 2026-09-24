@@ -1,0 +1,32 @@
+{
+    "study": "TeachCARE",
+    "analysis": "Sprint 3.6 - Experimental Interpretation and Comparative Analysis",
+    "baseline": {
+        "feasibility": "FEASIBLE",
+        "objective_value": 4.0,
+        "mad": 0.6666666666666666,
+        "workload_range": 2,
+        "interpretation": "The baseline scenario produced a feasible schedule with relatively balanced teacher workloads around the six-period target."
+    },
+    "availability_restricted": {
+        "feasibility": "FEASIBLE",
+        "objective_value": 16.0,
+        "mad": 2.6666666666666665,
+        "objective_change": 12.0,
+        "objective_percentage_change": 300.0,
+        "mad_change": 2.0,
+        "mad_percentage_change": 300.0,
+        "interpretation": "Restricting teacher availability preserved feasibility but increased workload imbalance. The optimizer compensated for reduced scheduling flexibility by assigning a less balanced workload distribution."
+    },
+    "qualification_restricted": {
+        "feasibility": "INFEASIBLE",
+        "objective_value": null,
+        "mad": null,
+        "interpretation": "Removing the critical English qualification made the scheduling problem infeasible. Because no valid schedule exists, workload balance metrics are not applicable to this scenario."
+    },
+    "comparative_findings": {
+        "availability_restriction": "Availability restriction increased the optimization objective from 4.0 to 16.0 and increased MAD from 0.6667 to 2.6667 while maintaining feasibility.",
+        "qualification_restriction": "Qualification restriction eliminated feasibility because the required English instruction could no longer be assigned to a qualified teacher.",
+        "overall": "The experiments demonstrate that the framework responds differently to different scheduling constraints. Availability constraints can reduce workload balance while preserving a feasible solution, whereas a critical qualification constraint can make the problem infeasible."
+    }
+}

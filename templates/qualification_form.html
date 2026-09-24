@@ -1,0 +1,133 @@
+{% extends "base.html" %}
+
+{% block title %}
+
+{% if qualification %}
+    Edit Qualification
+{% else %}
+    Add Qualification
+{% endif %}
+
+{% endblock %}
+
+
+{% block content %}
+
+<div class="mb-4">
+
+    <h2>
+
+        {% if qualification %}
+            Edit Qualification
+        {% else %}
+            Add Qualification
+        {% endif %}
+
+    </h2>
+
+    <p class="text-muted">
+        Define a qualification that can be assigned
+        to teachers and required by subjects.
+    </p>
+
+</div>
+
+
+<form method="POST">
+
+    <div class="card mb-4">
+
+        <div class="card-header">
+            Qualification Information
+        </div>
+
+        <div class="card-body">
+
+            <label
+                for="name"
+                class="form-label"
+            >
+                Qualification Name
+            </label>
+
+            <input
+                type="text"
+                class="form-control"
+                id="name"
+                name="name"
+                value="{{
+                    qualification.name
+                    if qualification
+                    else ''
+                }}"
+                required
+            >
+
+            <div class="form-text">
+                Qualification names must be unique.
+            </div>
+
+        </div>
+
+    </div>
+
+
+    {% if qualification %}
+
+    <div class="card mb-4">
+
+        <div class="card-body">
+
+            <h5>
+                Current Usage
+            </h5>
+
+            <p class="mb-1">
+                Teachers using this qualification:
+                <strong>
+                    {{ qualification.teachers | length }}
+                </strong>
+            </p>
+
+            <p class="mb-0">
+                Subjects requiring this qualification:
+                <strong>
+                    {{ qualification.subjects | length }}
+                </strong>
+            </p>
+
+        </div>
+
+    </div>
+
+    {% endif %}
+
+
+    <div class="d-flex gap-2">
+
+        <button
+            type="submit"
+            class="btn btn-primary"
+        >
+
+            {% if qualification %}
+                Save Changes
+            {% else %}
+                Add Qualification
+            {% endif %}
+
+        </button>
+
+
+        <a
+            href="{{ url_for('qualifications') }}"
+            class="btn btn-secondary"
+        >
+            Cancel
+        </a>
+
+    </div>
+
+</form>
+
+{% endblock %}

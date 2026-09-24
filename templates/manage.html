@@ -1,0 +1,247 @@
+{% extends "base.html" %}
+
+{% block title %}
+Manage Data
+{% endblock %}
+
+
+{% block content %}
+
+<div class="mb-4">
+
+    <h2>
+        Manage TeachCARE Data
+    </h2>
+
+    <p class="text-muted">
+        Configure the input data used by the
+        scheduling and workload-management framework.
+    </p>
+
+</div>
+
+
+<div class="row g-4">
+
+
+    <!-- Teachers -->
+
+    <div class="col-md-6 col-lg-4">
+
+        <div class="card h-100">
+
+            <div class="card-body">
+
+                <h5 class="card-title">
+                    Teachers
+                </h5>
+
+                <p class="card-text text-muted">
+                    Manage teacher information,
+                    qualifications, and educational-level
+                    eligibility.
+                </p>
+
+                <a
+                    href="{{ url_for('teachers') }}"
+                    class="btn btn-primary"
+                >
+                    Manage Teachers
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Qualifications -->
+
+    <div class="col-md-6 col-lg-4">
+
+        <div class="card h-100">
+
+            <div class="card-body">
+
+                <h5 class="card-title">
+                    Qualifications
+                </h5>
+
+                <p class="card-text text-muted">
+                    Manage the qualifications that
+                    teachers and subjects use.
+                </p>
+
+                <a
+                    href="{{ url_for('qualifications') }}"
+                    class="btn btn-primary"
+                >
+                    Manage Qualifications
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Sections -->
+
+    <div class="col-md-6 col-lg-4">
+
+        <div class="card h-100">
+
+            <div class="card-body">
+
+                <h5 class="card-title">
+                    Sections
+                </h5>
+
+                <p class="card-text text-muted">
+                    Manage grade levels, educational levels,
+                    and strands.
+                </p>
+
+                <a
+                    href="{{ url_for('sections') }}"
+                    class="btn btn-primary"
+                >
+                    Manage Sections
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Subjects -->
+
+    <div class="col-md-6 col-lg-4">
+
+        <div class="card h-100">
+
+            <div class="card-body">
+
+                <h5 class="card-title">
+                    Subjects
+                </h5>
+
+                <p class="card-text text-muted">
+                    Manage subjects and their required
+                    qualifications.
+                </p>
+
+                <a
+                    href="{{ url_for('subjects') }}"
+                    class="btn btn-primary"
+                >
+                    Manage Subjects
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Curriculum -->
+
+    <div class="col-md-6 col-lg-4">
+
+        <div class="card h-100">
+
+            <div class="card-body">
+
+                <h5 class="card-title">
+                    Curriculum Requirements
+                </h5>
+
+                <p class="card-text text-muted">
+                    Define how many periods each
+                    subject requires for a section.
+                </p>
+
+                <a
+                    href="{{ url_for('curriculum') }}"
+                    class="btn btn-primary"
+                >
+                    View Curriculum
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Availability -->
+
+    <div class="col-md-6 col-lg-4">
+
+        <div class="card h-100">
+
+            <div class="card-body">
+
+                <h5 class="card-title">
+                    Teacher Availability
+                </h5>
+
+                <p class="card-text text-muted">
+                    Configure which scheduling periods
+                    each teacher is available.
+                </p>
+
+                <a
+                    href="{{ url_for('availability') }}"
+                    class="btn btn-primary"
+                >
+                    Manage Availability
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Schedule Periods -->
+
+    <div class="col-md-6 col-lg-4">
+
+        <div class="card h-100">
+
+            <div class="card-body">
+
+                <h5 class="card-title">
+                    Schedule Periods
+                </h5>
+
+                <p class="card-text text-muted">
+                    View and manage the scheduling periods
+                    used by the optimization model.
+                </p>
+
+                <a
+                    href="{{ url_for('periods') }}"
+                    class="btn btn-primary"
+                >
+                    Manage Periods
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+</div>
+
+{% endblock %}

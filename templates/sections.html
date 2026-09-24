@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+
+{% block title %}Sections{% endblock %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <div>
+        <h1>Sections</h1>
+        <p class="text-muted mb-0">
+            Manage grade levels, educational levels, and strands used by the TeachCARE scheduling framework.
+        </p>
+    </div>
+
+    <a href="{{ url_for('create_section') }}" class="btn btn-primary">
+        + Add Section
+    </a>
+</div>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+            <div class="alert alert-{{ category }}" role="alert">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+
+{% if sections %}
+
+<div class="table-responsive">
+    <table class="table table-bordered table-hover align-middle">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Section</th>
+                <th>Grade Level</th>
+                <th>Educational Level</th>
+                <th>Strand</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for section in sections %}
+            <tr>
+                <td>{{ section.id }}</td>
+
+                <td>
+                    <strong>{{ section.name }}</strong>
+                </td>
+
+                <td>
+                    {{ section.grade_level }}
+                </td>
+
+                <td>
+                    {% if section.educational_level == "JHS" %}
+                        <span class="badge bg-primary">JHS</span>
+                    {% elif section.educational_level == "SHS" %}
+                        <span class="badge bg-success">SHS</span>
+                    {% else %}
+                        {{ section.educational_level }}
+                    {% endif %}
+                </td>
+
+                <td>
+                    {{ section.strand or "—" }}
+                </td>
+
+                <td>
+                    <a
+                        href="{{ url_for('edit_section', section_id=section.id) }}"
+                        class="btn btn-sm btn-outline-primary"
+                    >
+                        Edit
+                    </a>
+
+                    <form
+                        method="POST"
+                        action="{{ url_for('delete_section', section_id=section.id) }}"
+                        class="d-inline"
+                        onsubmit="return confirm('Delete this section? This action cannot be undone.');"
+                    >
+                        <button
+                            type="submit"
+                            class="btn btn-sm btn-outline-danger"
+                        >
+                            Delete
+                        </button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% else %}
+
+<div class="alert alert-info">
+    No sections have been created yet.
+</div>
+
+{% endif %}
+
+<div class="card mt-4">
+    <div class="card-body">
+        <h5 class="card-title">Research Input</h5>
+        <p class="card-text text-muted mb-0">
+            Section grade level, educational level, and strand information
+            are used by the scheduling framework when determining
+            teacher eligibility and curriculum requirements.
+        </p>
+    </div>
+</div>
+
+{% endblock %}

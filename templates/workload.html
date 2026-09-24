@@ -1,0 +1,183 @@
+{% extends "base.html" %}
+
+{% block title %}Workload Analysis{% endblock %}
+
+{% block content %}
+
+<h2>Workload Analysis</h2>
+
+<p class="text-muted">
+    Study target:
+    <strong>{{ report.target }} contact-teaching hours</strong>
+    within the assumed 8-hour workday.
+</p>
+
+{% if report.teachers %}
+
+<div class="table-responsive">
+    <table class="table table-bordered table-hover align-middle">
+
+        <thead>
+            <tr>
+                <th>Teacher</th>
+                <th>Contact Periods / Hours</th>
+                <th>Target</th>
+                <th>Deviation</th>
+                <th>Classification</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            {% for teacher in report.teachers %}
+
+            <tr>
+
+                <td>
+                    <strong>{{ teacher.name }}</strong>
+                </td>
+
+                <td>
+                    {{ teacher.workload }}
+                </td>
+
+                <td>
+                    {{ teacher.target }}
+                </td>
+
+                <td>
+                    {{ teacher.absolute_deviation }}
+                </td>
+
+                <td>
+
+                    {% if teacher.status == "GREEN" %}
+
+                        <span class="badge bg-success">
+                            Balanced
+                        </span>
+
+                    {% elif teacher.status == "YELLOW" %}
+
+                        <span class="badge bg-warning text-dark">
+                            Slightly Unbalanced
+                        </span>
+
+                    {% else %}
+
+                        <span class="badge bg-danger">
+                            Significantly Unbalanced
+                        </span>
+
+                    {% endif %}
+
+                </td>
+
+            </tr>
+
+            {% endfor %}
+
+        </tbody>
+
+    </table>
+</div>
+
+<!-- ===================================================== -->
+<!-- WORKLOAD SUMMARY -->
+<!-- ===================================================== -->
+
+<div class="row mt-4">
+
+    <div class="col-md-4 mb-3">
+        <div class="card">
+            <div class="card-body">
+                <h6 class="text-muted">Teachers</h6>
+                <h3>{{ report.teacher_count }}</h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4 mb-3">
+        <div class="card">
+            <div class="card-body">
+                <h6 class="text-muted">Total Workload</h6>
+                <h3>{{ report.total_workload }}</h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4 mb-3">
+        <div class="card">
+            <div class="card-body">
+                <h6 class="text-muted">Average Workload</h6>
+                <h3>{{ "%.2f"|format(report.average_workload) }}</h3>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="row">
+
+    <div class="col-md-4 mb-3">
+        <div class="card">
+            <div class="card-body">
+                <h6 class="text-muted">Minimum Workload</h6>
+                <h3>{{ report.minimum_workload }}</h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4 mb-3">
+        <div class="card">
+            <div class="card-body">
+                <h6 class="text-muted">Maximum Workload</h6>
+                <h3>{{ report.maximum_workload }}</h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4 mb-3">
+        <div class="card">
+            <div class="card-body">
+                <h6 class="text-muted">Mean Absolute Deviation (MAD)</h6>
+                <h3>{{ "%.2f"|format(report.mad) }}</h3>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- ===================================================== -->
+<!-- RESEARCH INPUT -->
+<!-- ===================================================== -->
+
+<div class="card mt-4">
+
+    <div class="card-body">
+
+        <h5 class="card-title">
+            Research Input
+        </h5>
+
+        <p class="card-text text-muted mb-0">
+            Workload is measured as the number of scheduled contact-teaching
+            periods assigned to each teacher. The workload report compares
+            each teacher's assigned workload with the study target and
+            calculates the Mean Absolute Deviation (MAD) as a measure of
+            workload balance.
+        </p>
+
+    </div>
+
+</div>
+
+{% else %}
+
+<div class="alert alert-info">
+    No workload data is available yet.
+</div>
+
+{% endif %}
+
+{% endblock %}

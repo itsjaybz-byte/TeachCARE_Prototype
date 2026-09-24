@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+
+{% if subject %}
+    {% set page_title = "Edit Subject" %}
+{% else %}
+    {% set page_title = "Add Subject" %}
+{% endif %}
+
+{% block title %}{{ page_title }}{% endblock %}
+
+{% block content %}
+
+<div class="mb-3">
+    <h1>{{ page_title }}</h1>
+    <p class="text-muted">
+        Configure the subject and its required teacher qualification.
+    </p>
+</div>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+            <div class="alert alert-{{ category }}" role="alert">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+
+<form method="POST">
+
+    <div class="card mb-3">
+        <div class="card-header">
+            Subject Information
+        </div>
+
+        <div class="card-body">
+
+            <div class="mb-3">
+                <label for="name" class="form-label">
+                    Subject Name
+                </label>
+
+                <input
+                    type="text"
+                    class="form-control"
+                    id="name"
+                    name="name"
+                    value="{{ subject.name if subject else '' }}"
+                    required
+                >
+
+                <div class="form-text">
+                    Subject names must be unique.
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label
+                    for="required_qualification_id"
+                    class="form-label"
+                >
+                    Required Qualification
+                </label>
+
+                {% set selected_qualification =
+                    subject.required_qualification_id
+                    if subject else None
+                %}
+
+                <select
+                    class="form-select"
+                    id="required_qualification_id"
+                    name="required_qualification_id"
+                    required
+                >
+                    <option value="">
+                        Select required qualification
+                    </option>
+
+                    {% for qualification in qualifications %}
+                    <option
+                        value="{{ qualification.id }}"
+                        {% if selected_qualification == qualification.id %}
+                            selected
+                        {% endif %}
+                    >
+                        {{ qualification.name }}
+                    </option>
+                    {% endfor %}
+                </select>
+
+                <div class="form-text">
+                    This qualification is used by the scheduling optimizer
+                    when checking teacher eligibility for this subject.
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary">
+        {% if subject %}
+            Update Subject
+        {% else %}
+            Add Subject
+        {% endif %}
+    </button>
+
+    <a
+        href="{{ url_for('subjects') }}"
+        class="btn btn-secondary"
+    >
+        Cancel
+    </a>
+
+</form>
+
+{% endblock %}

@@ -1,0 +1,11 @@
+{
+    "experiment": "Sprint 2.12 - Experiment 2",
+    "scenario": "Availability-restricted scenario: T001 unavailable for all scheduling periods",
+    "timestamp": "2026-08-15T01:29:49",
+    "restricted_teacher": "T001",
+    "restricted_teacher_name": "Maria Santos",
+    "solver_status": "OPTIMAL",
+    "message": "Generated 40 schedule entries.",
+    "schedule_entries": 40,
+    "objective_value": 16.0
+}

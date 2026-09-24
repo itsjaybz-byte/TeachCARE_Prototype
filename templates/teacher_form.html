@@ -1,0 +1,311 @@
+{% extends "base.html" %}
+
+{% block title %}
+
+{% if teacher %}
+    Edit Teacher
+{% else %}
+    Add Teacher
+{% endif %}
+
+{% endblock %}
+
+
+{% block content %}
+
+<div class="mb-4">
+
+    <h2>
+        {% if teacher %}
+            Edit Teacher
+        {% else %}
+            Add Teacher
+        {% endif %}
+    </h2>
+
+    <p class="text-muted">
+        Enter the teacher information used by
+        the TeachCARE scheduling framework.
+    </p>
+
+</div>
+
+
+<form method="POST">
+
+    <!-- =====================================================
+         BASIC INFORMATION
+         ===================================================== -->
+
+    <div class="card mb-4">
+
+        <div class="card-header">
+            Basic Information
+        </div>
+
+        <div class="card-body">
+
+            <div class="row g-3">
+
+                <div class="col-md-6">
+
+                    <label
+                        for="employee_id"
+                        class="form-label"
+                    >
+                        Employee ID
+                    </label>
+
+                    <input
+                        type="text"
+                        class="form-control"
+                        id="employee_id"
+                        name="employee_id"
+                        value="{{
+                            teacher.employee_id
+                            if teacher
+                            else ''
+                        }}"
+                        required
+                    >
+
+                    <div class="form-text">
+                        Must be unique.
+                    </div>
+
+                </div>
+
+
+                <div class="col-md-6">
+
+                    <label
+                        for="name"
+                        class="form-label"
+                    >
+                        Teacher Name
+                    </label>
+
+                    <input
+                        type="text"
+                        class="form-control"
+                        id="name"
+                        name="name"
+                        value="{{
+                            teacher.name
+                            if teacher
+                            else ''
+                        }}"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="col-md-6">
+
+                    <label
+                        for="major"
+                        class="form-label"
+                    >
+                        Major / Specialization
+                    </label>
+
+                    <input
+                        type="text"
+                        class="form-control"
+                        id="major"
+                        name="major"
+                        value="{{
+                            teacher.major
+                            if teacher
+                            else ''
+                        }}"
+                        required
+                    >
+
+                    <div class="form-text">
+                        Used when checking subject qualification.
+                    </div>
+
+                </div>
+
+
+                <div class="col-md-6">
+
+                    <label
+                        for="educational_attainment"
+                        class="form-label"
+                    >
+                        Educational Attainment
+                    </label>
+
+                    <input
+                        type="text"
+                        class="form-control"
+                        id="educational_attainment"
+                        name="educational_attainment"
+                        value="{{
+                            teacher.educational_attainment
+                            if teacher
+                            else ''
+                        }}"
+                        required
+                    >
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         ELIGIBILITY
+         ===================================================== -->
+
+    <div class="card mb-4">
+
+        <div class="card-header">
+            Educational-Level Eligibility
+        </div>
+
+        <div class="card-body">
+
+            <div class="form-check mb-2">
+
+                <input
+                    class="form-check-input"
+                    type="checkbox"
+                    id="jhs_eligible"
+                    name="jhs_eligible"
+
+                    {% if teacher and teacher.jhs_eligible %}
+                        checked
+                    {% endif %}
+                >
+
+                <label
+                    class="form-check-label"
+                    for="jhs_eligible"
+                >
+                    Eligible to teach Junior High School
+                </label>
+
+            </div>
+
+
+            <div class="form-check">
+
+                <input
+                    class="form-check-input"
+                    type="checkbox"
+                    id="shs_eligible"
+                    name="shs_eligible"
+
+                    {% if teacher and teacher.shs_eligible %}
+                        checked
+                    {% endif %}
+                >
+
+                <label
+                    class="form-check-label"
+                    for="shs_eligible"
+                >
+                    Eligible to teach Senior High School
+                </label>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         QUALIFICATIONS
+         ===================================================== -->
+
+    <div class="card mb-4">
+
+        <div class="card-header">
+            Qualifications
+        </div>
+
+        <div class="card-body">
+
+            {% if qualifications %}
+
+                {% for qualification in qualifications %}
+
+                    <div class="form-check mb-2">
+
+                        <input
+                            class="form-check-input"
+                            type="checkbox"
+                            name="qualifications"
+                            value="{{ qualification.id }}"
+                            id="qualification_{{ qualification.id }}"
+
+                            {% if teacher and qualification in teacher.qualifications %}
+                                checked
+                            {% endif %}
+                        >
+
+                        <label
+                            class="form-check-label"
+                            for="qualification_{{ qualification.id }}"
+                        >
+                            {{ qualification.name }}
+                        </label>
+
+                    </div>
+
+                {% endfor %}
+
+            {% else %}
+
+                <p class="text-muted mb-0">
+                    No qualifications are currently defined.
+                </p>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         ACTIONS
+         ===================================================== -->
+
+    <div class="d-flex gap-2">
+
+        <button
+            type="submit"
+            class="btn btn-primary"
+        >
+
+            {% if teacher %}
+                Save Changes
+            {% else %}
+                Add Teacher
+            {% endif %}
+
+        </button>
+
+
+        <a
+            href="{{ url_for('teachers') }}"
+            class="btn btn-secondary"
+        >
+            Cancel
+        </a>
+
+    </div>
+
+</form>
+
+{% endblock %}

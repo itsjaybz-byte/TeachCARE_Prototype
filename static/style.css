@@ -1,0 +1,5 @@
+body { background: #f5f7fa; }
+.hero { background: #e9eef5; border: 1px solid #d7dee8; }
+.metric { border: 0; box-shadow: 0 2px 10px rgba(0,0,0,.06); }
+.formula { background: #f1f3f5; padding: 18px; border-radius: 8px; font-family: monospace; margin: 18px 0; }
+table { background: white; }

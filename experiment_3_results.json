@@ -1,0 +1,12 @@
+{
+    "experiment": "Sprint 2.12 - Experiment 3",
+    "scenario": "Qualification-restricted scenario: T003 cannot teach English",
+    "timestamp": "2026-08-15T01:40:04",
+    "restricted_teacher": "T003",
+    "restricted_teacher_name": "Ana Reyes",
+    "removed_qualification": "English",
+    "solver_status": "INFEASIBLE",
+    "message": "No optimal feasible schedule was found. Solver status: Infeasible.",
+    "schedule_entries": 0,
+    "objective_value": null
+}

@@ -1,0 +1,216 @@
+{% extends "base.html" %}
+
+{% block title %}
+Teachers
+{% endblock %}
+
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+
+    <div>
+
+        <h2>
+            Teachers
+        </h2>
+
+        <p class="text-muted mb-0">
+            Manage teacher information used by the
+            TeachCARE scheduling framework.
+        </p>
+
+    </div>
+
+    <a
+        href="{{ url_for('create_teacher') }}"
+        class="btn btn-primary"
+    >
+        + Add Teacher
+    </a>
+
+</div>
+
+
+<div class="table-responsive">
+
+    <table class="table table-bordered table-hover align-middle">
+
+        <thead>
+
+            <tr>
+
+                <th>Employee ID</th>
+
+                <th>Name</th>
+
+                <th>Major</th>
+
+                <th>Attainment</th>
+
+                <th>JHS</th>
+
+                <th>SHS</th>
+
+                <th>Qualifications</th>
+
+                <th style="width: 150px;">
+                    Actions
+                </th>
+
+            </tr>
+
+        </thead>
+
+
+        <tbody>
+
+        {% for t in teachers %}
+
+            <tr>
+
+                <td>
+                    {{ t.employee_id }}
+                </td>
+
+                <td>
+                    {{ t.name }}
+                </td>
+
+                <td>
+                    {{ t.major }}
+                </td>
+
+                <td>
+                    {{ t.educational_attainment }}
+                </td>
+
+                <td>
+                    {% if t.jhs_eligible %}
+                        <span class="badge bg-success">
+                            Yes
+                        </span>
+                    {% else %}
+                        <span class="badge bg-secondary">
+                            No
+                        </span>
+                    {% endif %}
+                </td>
+
+                <td>
+                    {% if t.shs_eligible %}
+                        <span class="badge bg-success">
+                            Yes
+                        </span>
+                    {% else %}
+                        <span class="badge bg-secondary">
+                            No
+                        </span>
+                    {% endif %}
+                </td>
+
+                <td>
+                    {% if t.qualifications %}
+
+                        {{ t.qualifications
+                            | map(attribute="name")
+                            | join(", ")
+                        }}
+
+                    {% else %}
+
+                        <span class="text-muted">
+                            None
+                        </span>
+
+                    {% endif %}
+                </td>
+
+                <td>
+
+                    <div class="d-flex gap-1">
+
+                        <a
+                            href="{{
+                                url_for(
+                                    'edit_teacher',
+                                    teacher_id=t.id
+                                )
+                            }}"
+                            class="btn btn-sm btn-outline-primary"
+                        >
+                            Edit
+                        </a>
+
+
+                        <form
+                            method="POST"
+                            action="{{
+                                url_for(
+                                    'delete_teacher',
+                                    teacher_id=t.id
+                                )
+                            }}"
+                            onsubmit="return confirm(
+                                'Delete this teacher? Their generated schedule entries and availability records will also be removed.'
+                            );"
+                        >
+
+                            <button
+                                type="submit"
+                                class="btn btn-sm btn-outline-danger"
+                            >
+                                Delete
+                            </button>
+
+                        </form>
+
+                    </div>
+
+                </td>
+
+            </tr>
+
+        {% else %}
+
+            <tr>
+
+                <td
+                    colspan="8"
+                    class="text-center text-muted"
+                >
+                    No teachers found.
+                </td>
+
+            </tr>
+
+        {% endfor %}
+
+        </tbody>
+
+    </table>
+
+</div>
+
+
+<div class="card mt-4">
+
+    <div class="card-body">
+
+        <h5>
+            Research Input
+        </h5>
+
+        <p class="text-muted mb-0">
+
+            Teacher qualifications and JHS/SHS eligibility
+            are used by the scheduling optimizer when
+            determining valid teacher assignments.
+
+        </p>
+
+    </div>
+
+</div>
+
+{% endblock %}

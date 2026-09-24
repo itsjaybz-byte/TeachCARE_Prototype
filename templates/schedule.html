@@ -1,0 +1,131 @@
+{% extends "base.html" %}
+
+{% block title %}Generated Schedule{% endblock %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <div>
+        <h2>Generated Schedule</h2>
+        <p class="text-muted mb-0">
+            View the generated teacher assignments organized by scheduling period.
+        </p>
+    </div>
+</div>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+            <div class="alert alert-{{ category }}" role="alert">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+
+{% if entries %}
+
+<div class="table-responsive">
+
+    <table class="table table-bordered align-middle">
+
+        <thead class="table-light">
+            <tr>
+                <th style="width: 14%;">Day</th>
+                <th style="width: 28%;">Period 1</th>
+                <th style="width: 28%;">Period 2</th>
+                <th style="width: 28%;">Period 3</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            {% set days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"] %}
+            {% set periods = ["Period 1", "Period 2", "Period 3"] %}
+
+            {% for day in days %}
+
+            <tr>
+
+                <th class="table-light">
+                    {{ day }}
+                </th>
+
+                {% for period in periods %}
+
+                <td>
+
+                    {% set cell_entries = entries
+                        | selectattr("schedule_period.day", "equalto", day)
+                        | selectattr("schedule_period.period", "equalto", period)
+                        | list
+                    %}
+
+                    {% if cell_entries %}
+
+                        {% for e in cell_entries %}
+
+                        <div class="border rounded p-2 mb-2">
+
+                            <div>
+                                <strong>{{ e.section.name }}</strong>
+                            </div>
+
+                            <div>
+                                {{ e.subject.name }}
+                            </div>
+
+                            <div class="text-muted small">
+                                Teacher: {{ e.teacher.name }}
+                            </div>
+
+                        </div>
+
+                        {% endfor %}
+
+                    {% else %}
+
+                        <span class="text-muted">
+                            —
+                        </span>
+
+                    {% endif %}
+
+                </td>
+
+                {% endfor %}
+
+            </tr>
+
+            {% endfor %}
+
+        </tbody>
+
+    </table>
+
+</div>
+
+<div class="card mt-4">
+    <div class="card-body">
+
+        <h5 class="card-title">Research Input</h5>
+
+        <p class="card-text text-muted mb-0">
+            The generated schedule displays the assignments produced by the
+            scheduling framework. Each assignment connects a section, subject,
+            teacher, and scheduling period while respecting the configured
+            scheduling constraints.
+        </p>
+
+    </div>
+</div>
+
+{% else %}
+
+<div class="alert alert-warning">
+    No schedule has been generated yet.
+</div>
+
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,173 @@
+{% extends "base.html" %}
+
+{% if section %}
+    {% set page_title = "Edit Section" %}
+{% else %}
+    {% set page_title = "Add Section" %}
+{% endif %}
+
+{% block title %}{{ page_title }}{% endblock %}
+
+{% block content %}
+
+<div class="mb-3">
+    <h1>{{ page_title }}</h1>
+    <p class="text-muted">
+        Configure the section information used by the TeachCARE scheduling framework.
+    </p>
+</div>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+            <div class="alert alert-{{ category }}" role="alert">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+
+<form method="POST">
+
+    <div class="card mb-3">
+        <div class="card-header">
+            Section Information
+        </div>
+
+        <div class="card-body">
+
+            <div class="row">
+
+                <div class="col-md-6 mb-3">
+                    <label for="name" class="form-label">
+                        Section Name
+                    </label>
+
+                    <input
+                        type="text"
+                        class="form-control"
+                        id="name"
+                        name="name"
+                        value="{{ section.name if section else '' }}"
+                        required
+                    >
+
+                    <div class="form-text">
+                        Example: Grade 7 - Rizal
+                    </div>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label for="grade_level" class="form-label">
+                        Grade Level
+                    </label>
+
+                    <input
+                        type="text"
+                        class="form-control"
+                        id="grade_level"
+                        name="grade_level"
+                        value="{{ section.grade_level if section else '' }}"
+                        placeholder="e.g. Grade 7"
+                        required
+                    >
+
+                    <div class="form-text">
+                        Enter the grade level associated with this section.
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <div class="card mb-3">
+        <div class="card-header">
+            Educational Level
+        </div>
+
+        <div class="card-body">
+
+            <div class="mb-3">
+                <label for="educational_level" class="form-label">
+                    Educational Level
+                </label>
+
+                {% set current_level = section.educational_level if section else '' %}
+
+                <select
+                    class="form-select"
+                    id="educational_level"
+                    name="educational_level"
+                    required
+                >
+                    <option value="">Select educational level</option>
+
+                    <option
+                        value="JHS"
+                        {% if current_level == "JHS" %}selected{% endif %}
+                    >
+                        Junior High School (JHS)
+                    </option>
+
+                    <option
+                        value="SHS"
+                        {% if current_level == "SHS" %}selected{% endif %}
+                    >
+                        Senior High School (SHS)
+                    </option>
+                </select>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="card mb-3">
+        <div class="card-header">
+            Strand
+        </div>
+
+        <div class="card-body">
+
+            <div class="mb-3">
+                <label for="strand" class="form-label">
+                    Strand
+                </label>
+
+                <input
+                    type="text"
+                    class="form-control"
+                    id="strand"
+                    name="strand"
+                    value="{{ section.strand if section and section.strand else '' }}"
+                    placeholder="e.g. STEM, HUMSS, ABM"
+                >
+
+                <div class="form-text">
+                    Strand is applicable to Senior High School sections.
+                    Leave blank for Junior High School.
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary">
+        {% if section %}
+            Update Section
+        {% else %}
+            Add Section
+        {% endif %}
+    </button>
+
+    <a
+        href="{{ url_for('sections') }}"
+        class="btn btn-secondary"
+    >
+        Cancel
+    </a>
+
+</form>
+
+{% endblock %}

@@ -1,0 +1,45 @@
+{
+    "project": "TeachCARE Prototype",
+    "purpose": "Initial experimental dataset for evaluating teacher workload scheduling under controlled constraint changes.",
+    "baseline_objective_value": 4.0,
+    "experiments": [
+        {
+            "experiment_id": "EXP-01",
+            "name": "Baseline Feasible Scenario",
+            "scenario": "Baseline feasible demonstration dataset",
+            "solver_status": "OPTIMAL",
+            "feasibility": "FEASIBLE",
+            "schedule_entries": 40,
+            "objective_value": 4.0,
+            "objective_change_from_baseline": 0,
+            "message": "Generated 40 schedule entries."
+        },
+        {
+            "experiment_id": "EXP-02",
+            "name": "Availability-Restricted Scenario",
+            "scenario": "Availability-restricted scenario: T001 unavailable for all scheduling periods",
+            "solver_status": "OPTIMAL",
+            "feasibility": "FEASIBLE",
+            "schedule_entries": 40,
+            "objective_value": 16.0,
+            "objective_change_from_baseline": 12.0,
+            "restricted_teacher": "T001",
+            "restricted_teacher_name": "Maria Santos",
+            "message": "Generated 40 schedule entries."
+        },
+        {
+            "experiment_id": "EXP-03",
+            "name": "Qualification-Restricted Scenario",
+            "scenario": "Qualification-restricted scenario: T003 cannot teach English",
+            "solver_status": "INFEASIBLE",
+            "feasibility": "INFEASIBLE",
+            "schedule_entries": 0,
+            "objective_value": null,
+            "objective_change_from_baseline": null,
+            "restricted_teacher": "T003",
+            "restricted_teacher_name": "Ana Reyes",
+            "removed_qualification": "English",
+            "message": "No optimal feasible schedule was found. Solver status: Infeasible."
+        }
+    ]
+}

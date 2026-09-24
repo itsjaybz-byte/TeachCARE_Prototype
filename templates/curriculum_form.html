@@ -1,0 +1,184 @@
+{% extends "base.html" %}
+
+{% if requirement %}
+    {% set page_title = "Edit Curriculum Requirement" %}
+{% else %}
+    {% set page_title = "Add Curriculum Requirement" %}
+{% endif %}
+
+{% block title %}{{ page_title }}{% endblock %}
+
+{% block content %}
+
+<div class="mb-3">
+    <h2>{{ page_title }}</h2>
+
+    <p class="text-muted">
+        Define the number of subject periods required for a section.
+    </p>
+</div>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+            <div class="alert alert-{{ category }}" role="alert">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+
+<div class="card">
+
+    <div class="card-header">
+        Curriculum Requirement Information
+    </div>
+
+    <div class="card-body">
+
+        <form method="POST">
+
+            <div class="mb-3">
+
+                <label
+                    for="section_id"
+                    class="form-label"
+                >
+                    Section
+                </label>
+
+                <select
+                    id="section_id"
+                    name="section_id"
+                    class="form-select"
+                    required
+                >
+
+                    <option value="">
+                        Select section
+                    </option>
+
+                    {% for section in sections %}
+
+                    <option
+                        value="{{ section.id }}"
+                        {% if requirement
+                           and requirement.section_id == section.id %}
+                            selected
+                        {% endif %}
+                    >
+                        {{ section.name }}
+                        — {{ section.grade_level }}
+                        — {{ section.educational_level }}
+                        {% if section.strand %}
+                            — {{ section.strand }}
+                        {% endif %}
+                    </option>
+
+                    {% endfor %}
+
+                </select>
+
+                <div class="form-text">
+                    Select the section that requires this subject.
+                </div>
+
+            </div>
+
+
+            <div class="mb-3">
+
+                <label
+                    for="subject_id"
+                    class="form-label"
+                >
+                    Subject
+                </label>
+
+                <select
+                    id="subject_id"
+                    name="subject_id"
+                    class="form-select"
+                    required
+                >
+
+                    <option value="">
+                        Select subject
+                    </option>
+
+                    {% for subject in subjects %}
+
+                    <option
+                        value="{{ subject.id }}"
+                        {% if requirement
+                           and requirement.subject_id == subject.id %}
+                            selected
+                        {% endif %}
+                    >
+                        {{ subject.name }}
+                    </option>
+
+                    {% endfor %}
+
+                </select>
+
+                <div class="form-text">
+                    Select the subject required by the section.
+                </div>
+
+            </div>
+
+
+            <div class="mb-3">
+
+                <label
+                    for="required_periods"
+                    class="form-label"
+                >
+                    Required Periods
+                </label>
+
+                <input
+                    type="number"
+                    id="required_periods"
+                    name="required_periods"
+                    class="form-control"
+                    min="1"
+                    step="1"
+                    required
+                    value="{% if requirement %}{{ requirement.required_periods }}{% endif %}"
+                >
+
+                <div class="form-text">
+                    Enter the number of periods required per
+                    scheduling cycle.
+                </div>
+
+            </div>
+
+
+            <button
+                type="submit"
+                class="btn btn-primary"
+            >
+                {% if requirement %}
+                    Update Requirement
+                {% else %}
+                    Add Requirement
+                {% endif %}
+            </button>
+
+            <a
+                href="{{ url_for('curriculum') }}"
+                class="btn btn-secondary"
+            >
+                Cancel
+            </a>
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}
